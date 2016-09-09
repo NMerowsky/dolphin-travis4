@@ -55,7 +55,7 @@ before_script:
   - sudo mysql -e "use biocore; UPDATE ngs_samples set samplename = name;" -uroot
   - sudo mysql -e "use biocore; INSERT INTO amazon_credentials ( aws_access_key_id, aws_secret_access_key, bucket ) VALUES ( 'test_access', 'test_secret', 'test_bucket' );" -uroot
   - sudo mysql -e "use biocore; INSERT INTO ngs_organism (organism, organism_symbol) VALUES ('mousetest', 'mm10'); UPDATE ngs_samples SET organism_id = 1;" -uroot
-  - PATH=$PATH:/home/travis/build/dolphin-bin
+  - export PATH=$PATH:/home/travis/build/dolphin-bin/
   - DOLPHIN_PARAMS_SECTION=Travis
 
 script:
@@ -66,11 +66,12 @@ script:
   - sudo mysql --user=bioinfo --password=bioinfo2013 biocore < db/travis.sql
   #	Run workflow
   - cd scripts
-  - travis_wait 20 python dolphin_wrapper.py -r 4 -c Travis
-  - tree /home/travis/build/testrun1/
+  - travis_wait 15 python dolphin_wrapper.py -r 4 -c Travis
   - sudo ../unitTesting/run_insertion.sh
+  
   #	ChipSeq
-  - travis_wait 40 python dolphin_wrapper.py -r 8 -c Travis
+  - travis_wait 25 python dolphin_wrapper.py -r 8 -c Travis
+  - tree /home/travis/build/testrun5
   #	additional ajax
   #- phpunit unitTesting/ajax/tablegenerator_unittest.php
   #- phpunit unitTesting/ajax/statquerydb_unittest.php
