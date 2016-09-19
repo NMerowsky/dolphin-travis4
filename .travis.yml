@@ -73,7 +73,7 @@ script:
   - sudo mysql --user=bioinfo --password=bioinfo2013 biocore < db/travis.sql
   #	Run workflow
   - cd scripts
-  - travis_wait 10 python dolphin_wrapper.py -r 4 -c Travis
+  - travis_wait 11 python dolphin_wrapper.py -r 4 -c Travis
   - sudo ../unitTesting/run_insertion.sh
   
   #	ChipSeq
