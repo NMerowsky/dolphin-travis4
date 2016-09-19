@@ -13,17 +13,30 @@ services:
   - mysql
 
 before_install:
+  - sudo add-apt-repository -y ppa:webupd8team/java
   - sudo apt-get update
   - sudo apt-get -y install aptitude
-  - sudo apt-get -y install apache2 libapache2-mod-php5 php5-mysqlnd php5-gd php-pear php5-curl lynx-cur libxml2-dev software-properties-common tree perl
+  - sudo apt-get -y install apache2 libapache2-mod-php5 php5-mysqlnd php5-gd php-pear php5-curl lynx-cur libxml2-dev software-properties-common tree perl oracle-java7-installer
   - sudo pip install --upgrade pycrypto urllib3
   - sudo pip install simple-crypt MySQL-python pjson boto numpy boto3
+  - git clone https://github.com/UMMS-Biocore/dolphin-bin.git /home/travis/build/dolphin-bin
+  - git clone https://github.com/UMMS-Biocore/dolphin-genome-data.git /home/travis/build/dolphin-genome-data
+  - sudo sed -i '$ a\export PATH=$PATH:/home/travis/build/dolphin-bin' /etc/apache2/envvars
+  - sudo cat /etc/apache2/envvars
+  - export PATH=$PATH:/home/travis/build/dolphin-bin
+  - sudo mkdir -p /var/www/.java/.systemPrefs
+  - sudo mkdir /var/www/.java/.userPrefs
+  - sudo chmod -R 755 /var/www/.java
+  - sudo chown -R ${APACHE_RUN_USER}:${APACHE_RUN_GROUP} /var/www
+  - sudo sed -i '$ a\export JAVA_OPTS="-Djava.util.prefs.systemRoot=/var/www/.java Djava.util.prefs.userRoot=/var/www/.java/.userPrefs\"' /etc/apache2/envvars
+  - java -version
   
 install:
   ######################
   # CHANGE BRANCH HERE #
   # use --branch=      #
   ######################
+  - git clone --branch=2016_08_17_travisupdate https://github.com/Rhaknam/dolphin-tools.git /home/travis/build/dolphin_tools
   - git clone --branch=2016_08_26_travisupdate https://github.com/Rhaknam/dolphin-ui.git /home/travis/build/dolphin-ui
   - cd /home/travis/build/dolphin-ui
   
@@ -36,9 +49,6 @@ before_script:
   - sudo a2enmod rewrite
   - sudo service apache2 restart
   # dolphin repos
-  - git clone --branch=2016_08_17_travisupdate https://github.com/Rhaknam/dolphin-tools.git /home/travis/build/dolphin_tools
-  - git clone https://github.com/UMMS-Biocore/dolphin-bin.git /home/travis/build/dolphin-bin
-  - git clone https://github.com/UMMS-Biocore/dolphin-genome-data.git /home/travis/build/dolphin-genome-data
   - sudo mkdir -p /home/travis/build/pub /home/travis/build/logs tmp/files tmp/logs tmp/logs/run4 tmp/logs/run5 tmp/logs/run6 tmp/logs/run7 tmp/logs/run8
   - sudo ln -s $(pwd) /var/www/dolphin
   - sudo ln -s /home/travis/build/pub public/pub
@@ -55,7 +65,6 @@ before_script:
   - sudo mysql -e "use biocore; UPDATE ngs_samples set samplename = name;" -uroot
   - sudo mysql -e "use biocore; INSERT INTO amazon_credentials ( aws_access_key_id, aws_secret_access_key, bucket ) VALUES ( 'test_access', 'test_secret', 'test_bucket' );" -uroot
   - sudo mysql -e "use biocore; INSERT INTO ngs_organism (organism, organism_symbol) VALUES ('mousetest', 'mm10'); UPDATE ngs_samples SET organism_id = 1;" -uroot
-  - export PATH=$PATH:/home/travis/build/dolphin-bin/
   - DOLPHIN_PARAMS_SECTION=Travis
 
 script:
@@ -66,7 +75,7 @@ script:
   - sudo mysql --user=bioinfo --password=bioinfo2013 biocore < db/travis.sql
   #	Run workflow
   - cd scripts
-  - travis_wait 15 python dolphin_wrapper.py -r 4 -c Travis
+  - travis_wait 10 python dolphin_wrapper.py -r 4 -c Travis
   - sudo ../unitTesting/run_insertion.sh
   
   #	ChipSeq
