@@ -67,11 +67,11 @@ before_script:
 
 script:
   #	ajax - initial mapping
-  
   - phpunit unitTesting/ngsimport_unittest.php
   - phpunit unitTesting/ajax/ngsalterdb_unittest.php
   - sudo mysql --user=bioinfo --password=bioinfo2013 biocore < db/travis.sql
-  #	Run workflow
+  
+  #	Run Import
   - cd scripts
   - travis_wait 11 python dolphin_wrapper.py -r 4 -c Travis
   - sudo ../unitTesting/run_insertion.sh
@@ -79,27 +79,7 @@ script:
   #	ChipSeq
   - travis_wait 35 python dolphin_wrapper.py -r 8 -c Travis
   - tree /home/travis/build/testrun5
-  #	additional ajax
-  #- phpunit unitTesting/ajax/tablegenerator_unittest.php
-  #- phpunit unitTesting/ajax/statquerydb_unittest.php
-  #- phpunit unitTesting/ajax/sessionrequests_unittest.php
-  #- phpunit unitTesting/ajax/profiledb_unittest.php
-  #- phpunit unitTesting/ajax/ngsquerydb_unittest.php
-  #- phpunit unitTesting/ajax/ngsfastlanedb_unittest.php
-  #- phpunit unitTesting/ajax/ngs_tables_unittest.php
-  #- phpunit unitTesting/ajax/kill_pid_unittest.php
-  #- phpunit unitTesting/ajax/initialmappingdb_unittest.php
-  #- phpunit unitTesting/ajax/dolphinfuncs_unittest.php
-  #- phpunit unitTesting/ajax/dataservice_unittest.php
-  #- phpunit unitTesting/ajax/datajobs_unittest.php
-  #- phpunit unitTesting/ajax/dataerrorlogs_unittest.php
-  #- phpunit unitTesting/ajax/dashboardquerydb_unittest.php
-  #- phpunit unitTesting/ajax/browse_edit_unittest.php
-  #- phpunit unitTesting/ajax/admindashboardquerydb_unittest.php
-  #- phpunit unitTesting/ajax/adminstatquerydb_unittest.php
-  #	api
-  #- phpunit unitTesting/api/funcs_unittest.php
-
+  
 after_script:
   - mysql -e "show databases;" -uroot
   - mysql -e "use biocore; show tables;" -uroot
