@@ -76,7 +76,7 @@ script:
   
   #	Run Import
   - cd scripts
-  - travis_wait 11 python dolphin_wrapper.py -r 4 -c Travis
+  - python dolphin_wrapper.py -r 4 -c Travis
   - sudo ../unitTesting/run_insertion.sh
   
   #	ChipSeq
