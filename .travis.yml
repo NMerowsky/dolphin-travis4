@@ -77,7 +77,7 @@ script:
   - sudo ../unitTesting/run_insertion.sh
   
   #	ChipSeq
-  - travis_wait 25 python dolphin_wrapper.py -r 8 -c Travis
+  - travis_wait 35 python dolphin_wrapper.py -r 8 -c Travis
   - tree /home/travis/build/testrun5
   #	additional ajax
   #- phpunit unitTesting/ajax/tablegenerator_unittest.php
