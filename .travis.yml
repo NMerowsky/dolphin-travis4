@@ -80,8 +80,9 @@ script:
   - sudo ../unitTesting/run_insertion.sh
   
   #	ChipSeq
-  - travis_wait 35 python dolphin_wrapper.py -r 8 -c Travis
+  - travis_wait 30 python dolphin_wrapper.py -r 8 -c Travis
   - tree /home/travis/build/testrun5
+  - cat /home/travis/build/testrun5/tmp/logs/*
   
 after_script:
   - mysql -e "show databases;" -uroot
