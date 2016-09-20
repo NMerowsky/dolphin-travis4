@@ -14,8 +14,6 @@ services:
 
 before_install:
   - sudo echo "deb http://cran.rstudio.com/bin/linux/ubuntu xenial/" | sudo tee -a /etc/apt/sources.list
-  - sudo gpg --keyserver keyserver.ubuntu.com --recv-key E084DAB9
-  - sudo gpg -a --export E084DAB9 | sudo apt-key add -
   - sudo apt-get update
   - sudo apt-get -y install aptitude
   - sudo apt-get -y install apache2 libapache2-mod-php5 php5-mysqlnd php5-gd php-pear php5-curl lynx-cur libxml2-dev software-properties-common tree perl r-base r-base-dev
