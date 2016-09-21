@@ -40,8 +40,8 @@ install:
   # CHANGE BRANCH HERE #
   # use --branch=      #
   ######################
-  - git clone --branch=2016_08_17_travisupdate https://github.com/Rhaknam/dolphin-tools.git /home/travis/build/dolphin_tools
-  - git clone --branch=2016_08_26_travisupdate https://github.com/Rhaknam/dolphin-ui.git /home/travis/build/dolphin-ui
+  - git clone --branch=2016_09_21_travis https://github.com/Rhaknam/dolphin-tools.git /home/travis/build/dolphin_tools
+  - git clone --branch=2016_09_21_travis https://github.com/Rhaknam/dolphin-ui.git /home/travis/build/dolphin-ui
   - cd /home/travis/build/dolphin-ui
   
 before_script:
@@ -76,16 +76,13 @@ script:
   - phpunit unitTesting/ngsimport_unittest.php
   - phpunit unitTesting/ajax/ngsalterdb_unittest.php
   - sudo mysql --user=bioinfo --password=bioinfo2013 biocore < db/travis.sql
-  
   #	Run Import
   - cd scripts
   - python dolphin_wrapper.py -r 4 -c Travis
   - sudo ../unitTesting/run_insertion.sh
-  
   #	ChipSeq
   - travis_wait 30 python dolphin_wrapper.py -r 8 -c Travis
   - tree /home/travis/build/testrun5
-  - cat /home/travis/build/testrun5/tmp/logs/*
   
 after_script:
   - mysql -e "show databases;" -uroot
